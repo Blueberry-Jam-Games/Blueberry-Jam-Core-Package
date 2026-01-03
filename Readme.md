@@ -1,4 +1,8 @@
-Install with `Window -> Package Manager -> Add package from git URL` and use the url `https://github.com/Blueberry-Jam-Games/Blueberry-Core.git?path=/Packages/blueberry-jam-core`
+Install with `Window -> Package Manager -> Add package from git URL` and use the url `https://github.com/Blueberry-Jam-Games/Blueberry-Jam-Core-Package`.
+
+OR Install as a local submodule package. From the Unity directory in terminal this can be done with `git submodule add https://github.com/Blueberry-Jam-Games/Blueberry-Jam-Core-Package Packages/blueberry-jam-core`.
+
+If you are making global improvements, feel free to use the main branch as the submodule, otherwise consider creating a game-specific branch of the repository for modifications you may need to make.
 
 ## To-Do List
 
@@ -50,4 +54,3 @@ Install with `Window -> Package Manager -> Add package from git URL` and use the
 
 ### Other:
 - Investigate GLTF Processes?
-- Bezier?
