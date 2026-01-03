@@ -1,0 +1,18 @@
+{
+    "name": "io.github.blueberry-jam-games.core.Editor",
+    "rootNamespace": "BJEditor",
+    "references": [
+        "GUID:fb77917cc8dfade46913d04e8404ddfa"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
