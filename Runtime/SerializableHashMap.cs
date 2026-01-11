@@ -32,7 +32,7 @@ namespace BJ
 
             foreach (var kvp in dictionary)
             {
-                serialization.Add (new StoredItem<K, V>{ key = kvp.Key, value = kvp.Value });
+                serialization.Add(new StoredItem<K, V> { key = kvp.Key, value = kvp.Value });
             }
         }
 
@@ -45,7 +45,7 @@ namespace BJ
                 // Prevent duplicate key crash
                 if (!dictionary.ContainsKey(serialization[i].key))
                 {
-                    dictionary.Add(serialization[i].key, serialization[i].value);                    
+                    dictionary.Add(serialization[i].key, serialization[i].value);
                 }
             }
         }

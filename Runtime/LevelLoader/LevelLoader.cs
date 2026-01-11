@@ -54,27 +54,27 @@ namespace BJ
         // Internal tracker for if a level load operation is in progress.
         private bool loadingLevel = false;
 
-        private void Awake ()
+        private void Awake()
         {
             if (instance == null)
             {
-                DontDestroyOnLoad (this.gameObject);
+                DontDestroyOnLoad(this.gameObject);
                 instance = this;
-                transitions = new Dictionary<string, LevelTransitionEffect> ();
+                transitions = new Dictionary<string, LevelTransitionEffect>();
 
                 GameObject defaultTransition = new GameObject("DefaultTransition");
                 TransitionNone baseTransition = defaultTransition.AddComponent<TransitionNone>();
-                RegisterTransition (DEFAULT_ANIMATION_NONE, baseTransition);
+                RegisterTransition(DEFAULT_ANIMATION_NONE, baseTransition);
             }
             else
             {
-                Destroy (this.gameObject);
+                Destroy(this.gameObject);
             }
         }
 
-        private void Start ()
+        private void Start()
         {
-            OnSceneLoaded?.Invoke (SceneManager.GetActiveScene ().name);
+            OnSceneLoaded?.Invoke(SceneManager.GetActiveScene().name);
         }
 
         /**
@@ -84,9 +84,9 @@ namespace BJ
          *
          * @return True if the register was successful.
          */
-        public bool RegisterTransition (string id, LevelTransitionEffect transition)
+        public bool RegisterTransition(string id, LevelTransitionEffect transition)
         {
-            if (transitions.ContainsKey (id))
+            if (transitions.ContainsKey(id))
             {
                 Debug.LogError($"ID {id} already exists.");
                 return false;
@@ -94,8 +94,8 @@ namespace BJ
             else
             {
                 transitions[id] = transition;
-                DontDestroyOnLoad (transition.gameObject);
-                transition.gameObject.SetActive (false);
+                DontDestroyOnLoad(transition.gameObject);
+                transition.gameObject.SetActive(false);
                 return true;
             }
         }
@@ -105,30 +105,30 @@ namespace BJ
          * @param id      The text id of the transition to delete.
          * @param destroy True to destroy the transition being removed.
          */
-        public void RemoveTransition (string id, bool destroy)
+        public void RemoveTransition(string id, bool destroy)
         {
-            if (id.Equals (DEFAULT_ANIMATION_NONE))
+            if (id.Equals(DEFAULT_ANIMATION_NONE))
             {
-                Debug.LogWarning ("Removing the NONE animation is not allowed.");
+                Debug.LogWarning("Removing the NONE animation is not allowed.");
             }
             else if (transitions.ContainsKey(id))
             {
                 LevelTransitionEffect transition = transitions[id];
-                transitions.Remove (id);
+                transitions.Remove(id);
                 if (destroy)
                 {
-                    Destroy (transition.gameObject);
+                    Destroy(transition.gameObject);
                 }
 
-                if (id.Equals (defaultAnimation))
+                if (id.Equals(defaultAnimation))
                 {
                     defaultAnimation = DEFAULT_ANIMATION_NONE;
-                    Debug.LogWarning ("Removed the default animation {id}, default is reverting to NONE.");
+                    Debug.LogWarning("Removed the default animation {id}, default is reverting to NONE.");
                 }
             }
             else
             {
-                Debug.LogError ($"ID {id} does not exist.");
+                Debug.LogError($"ID {id} does not exist.");
             }
         }
 
@@ -139,21 +139,21 @@ namespace BJ
          * @param blackOut   The animation to play for curtains down.
          * @param curtainsUp The animation to play for curtains up.
          */
-        public void LoadLevel (string level, string blackOut, string curtainsUp)
+        public void LoadLevel(string level, string blackOut, string curtainsUp)
         {
-            if (!transitions.ContainsKey (blackOut))
+            if (!transitions.ContainsKey(blackOut))
             {
                 Debug.LogError ($"Blackout Effect {blackOut} does not exist, using default.");
                 blackOut = defaultAnimation;
             }
             // not else, can be both
-            if (!transitions.ContainsKey (curtainsUp))
+            if (!transitions.ContainsKey(curtainsUp))
             {
                 Debug.LogError ($"Curtain Up Effect {curtainsUp} does not exist, using default.");
                 curtainsUp = defaultAnimation;
             }
 
-            StartCoroutine (InternalLevelLoad (level, blackOut, curtainsUp));
+            StartCoroutine (InternalLevelLoad(level, blackOut, curtainsUp));
         }
 
         /**
@@ -161,15 +161,15 @@ namespace BJ
          * @param level     The new level to load.
          * @param transtion The animation to play.
          */
-        public void LoadLevel (string level, string transtion)
+        public void LoadLevel(string level, string transtion)
         {
-            if (!transitions.ContainsKey (transtion))
+            if (!transitions.ContainsKey(transtion))
             {
                 Debug.LogError ($"Transition Effect {transtion} does not exist, using default.");
                 transtion = defaultAnimation;
             }
 
-            LoadLevel (level, transtion, transtion);
+            LoadLevel(level, transtion, transtion);
         }
 
         /**
@@ -177,11 +177,11 @@ namespace BJ
          *
          * @param newDefault The new default transition to play, must be previously registered.
          */
-        public void SetDefaultTransition (string newDefault)
+        public void SetDefaultTransition(string newDefault)
         {
-            if (!transitions.ContainsKey (newDefault))
+            if (!transitions.ContainsKey(newDefault))
             {
-                Debug.LogError ($"Attempted to set default transition to {newDefault} but it has not been registered.");
+                Debug.LogError($"Attempted to set default transition to {newDefault} but it has not been registered.");
             }
             else
             {
@@ -195,28 +195,28 @@ namespace BJ
          * @param blackOut   The animation to play for curtains down.
          * @param curtainsUp The animation to play for curtains up.
          */
-        private IEnumerator InternalLevelLoad (string level, string blackOut, string curtainsUp)
+        private IEnumerator InternalLevelLoad(string level, string blackOut, string curtainsUp)
         {
             if (loadingLevel)
             {
-                Debug.LogError ("Level Load attempted while another load is in progress.");
+                Debug.LogError("Level Load attempted while another load is in progress.");
                 yield break; // Exit early
             }
             loadingLevel = true;
 
-            Debug.Log ($"Loading level {level}, starting curtains down.");
+            Debug.Log($"Loading level {level}, starting curtains down.");
 
-            OnSceneLoadRequested?.Invoke (level);
+            OnSceneLoadRequested?.Invoke(level);
 
             LevelTransitionEffect transitionOut = transitions[blackOut];
-            transitionOut.gameObject.SetActive (true);
-            transitionOut.JumpToCurtainUp ();
+            transitionOut.gameObject.SetActive(true);
+            transitionOut.JumpToCurtainUp();
 
-            yield return transitionOut.CurtainDown ();
+            yield return transitionOut.CurtainDown();
 
             Debug.Log ($"Loading level {level}, completed curtains down.");
 
-            OnSceneBlackout?.Invoke (level);
+            OnSceneBlackout?.Invoke(level);
 
             // Do level loading
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(level);
@@ -225,11 +225,11 @@ namespace BJ
             {
                 // Leaves some space for load holds
                 double dynamicProgress = loadOperation.progress / 1.1;
-                yield return transitionOut.UpdateProgress (dynamicProgress);
+                yield return transitionOut.UpdateProgress(dynamicProgress);
                 yield return null;
             }
 
-            OnSceneLoaded?.Invoke (level);
+            OnSceneLoaded?.Invoke(level);
             // Wait for load reasons
             while (loadHoldReasons.Count != 0)
             {
@@ -239,25 +239,25 @@ namespace BJ
             LevelTransitionEffect transitionIn = transitionOut;
 
             // Guarentee you get a call at 100%
-            yield return transitionOut.UpdateProgress (1.0);
+            yield return transitionOut.UpdateProgress(1.0);
 
             Debug.Log ($"Loading level {level}, starting curtains up.");
 
             // If the transition out and in are different this is where the handoff happens, otherwise it is skipped.
-            if (!blackOut.Equals (curtainsUp))
+            if (!blackOut.Equals(curtainsUp))
             {
                 transitionIn = transitions[curtainsUp];
 
-                transitionOut.gameObject.SetActive (false);
-                transitionIn.gameObject.SetActive (true);
-                transitionIn.JumpToCurtainDown ();
+                transitionOut.gameObject.SetActive(false);
+                transitionIn.gameObject.SetActive(true);
+                transitionIn.JumpToCurtainDown();
             }
 
-            yield return transitionIn.CurtainUp ();
+            yield return transitionIn.CurtainUp();
 
-            transitionIn.gameObject.SetActive (false);
+            transitionIn.gameObject.SetActive(false);
 
-            Debug.Log ($"Loading level {level}, completed curtains up.");
+            Debug.Log($"Loading level {level}, completed curtains up.");
 
             OnBlackoutLifted?.Invoke(level);
 
