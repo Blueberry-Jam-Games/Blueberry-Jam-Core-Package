@@ -6,13 +6,13 @@ namespace BJ
 {
     public class TransitionFade : LevelTransitionEffect
     {
-        [Header ("Animation Components")]
+        [Header("Animation Components")]
         [SerializeField]
         private CanvasGroup overallImage;
         [SerializeField]
         private Slider loadBar;
 
-        [Header ("Configuration Components")]
+        [Header("Configuration Components")]
         [SerializeField]
         private Image backgroundImage;
         [SerializeField]
@@ -30,9 +30,9 @@ namespace BJ
             while (time < animationTime)
             {
                 time += Time.deltaTime;
-                float newAlpha = Mathf.Clamp01 (time / animationTime);
+                float newAlpha = Mathf.Clamp01(time / animationTime);
                 overallImage.alpha = newAlpha;
-                
+
                 yield return null;
             }
 
@@ -46,9 +46,9 @@ namespace BJ
             while (time < animationTime)
             {
                 time += Time.deltaTime;
-                float newAlpha = 1.0f - Mathf.Clamp01 (time / animationTime);
+                float newAlpha = 1.0f - Mathf.Clamp01(time / animationTime);
                 overallImage.alpha = newAlpha;
-                
+
                 yield return null;
             }
 
@@ -73,15 +73,15 @@ namespace BJ
             yield break;
         }
 
-        public void Init (float animationTime, Color background, bool progressBar, Color unloaded, Color loaded)
+        public void Init(float animationTime, Color background, bool progressBar, Color unloaded, Color loaded)
         {
             this.animationTime = animationTime;
             this.backgroundImage.color = background;
             this.useLoadBar = progressBar;
-            this.loadBar.gameObject.SetActive (useLoadBar);
+            this.loadBar.gameObject.SetActive(useLoadBar);
             this.unloadedColour.color = unloaded;
             this.loadedColour.color = loaded;
-            JumpToCurtainUp ();
+            JumpToCurtainUp();
         }
     }
 }

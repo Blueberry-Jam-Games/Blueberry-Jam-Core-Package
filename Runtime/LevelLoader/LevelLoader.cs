@@ -143,17 +143,17 @@ namespace BJ
         {
             if (!transitions.ContainsKey(blackOut))
             {
-                Debug.LogError ($"Blackout Effect {blackOut} does not exist, using default.");
+                Debug.LogError($"Blackout Effect {blackOut} does not exist, using default.");
                 blackOut = defaultAnimation;
             }
             // not else, can be both
             if (!transitions.ContainsKey(curtainsUp))
             {
-                Debug.LogError ($"Curtain Up Effect {curtainsUp} does not exist, using default.");
+                Debug.LogError($"Curtain Up Effect {curtainsUp} does not exist, using default.");
                 curtainsUp = defaultAnimation;
             }
 
-            StartCoroutine (InternalLevelLoad(level, blackOut, curtainsUp));
+            StartCoroutine(InternalLevelLoad(level, blackOut, curtainsUp));
         }
 
         /**
@@ -165,7 +165,7 @@ namespace BJ
         {
             if (!transitions.ContainsKey(transtion))
             {
-                Debug.LogError ($"Transition Effect {transtion} does not exist, using default.");
+                Debug.LogError($"Transition Effect {transtion} does not exist, using default.");
                 transtion = defaultAnimation;
             }
 
@@ -214,7 +214,7 @@ namespace BJ
 
             yield return transitionOut.CurtainDown();
 
-            Debug.Log ($"Loading level {level}, completed curtains down.");
+            Debug.Log($"Loading level {level}, completed curtains down.");
 
             OnSceneBlackout?.Invoke(level);
 
@@ -241,7 +241,7 @@ namespace BJ
             // Guarentee you get a call at 100%
             yield return transitionOut.UpdateProgress(1.0);
 
-            Debug.Log ($"Loading level {level}, starting curtains up.");
+            Debug.Log($"Loading level {level}, starting curtains up.");
 
             // If the transition out and in are different this is where the handoff happens, otherwise it is skipped.
             if (!blackOut.Equals(curtainsUp))
