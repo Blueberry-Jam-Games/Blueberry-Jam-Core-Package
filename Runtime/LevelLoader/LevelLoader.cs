@@ -78,7 +78,9 @@ namespace BJ
         }
 
         /**
-         * @brief Adds a new transition to the list of available transitions. It will be marked to not destroy on load and deactivated.
+         * @brief Adds a new transition to the list of available transitions.
+         *        It will be marked to not destroy on load and deactivated, it's name will be set to the given id and its parent will be changed to this.
+         *
          * @param id         The text id to refer to the transition by.
          * @param transition A reference to the transition effect, the game object the transition effect is attached to must be the root of the effect.
          *
@@ -95,6 +97,8 @@ namespace BJ
             {
                 transitions[id] = transition;
                 DontDestroyOnLoad(transition.gameObject);
+                transition.transform.parent = this.transform;
+                transition.gameObject.name = id;
                 transition.gameObject.SetActive(false);
                 return true;
             }

@@ -22,6 +22,9 @@ namespace BJ
          * @brief Update the animation based on the level loading progress.
          *        This is a coroutine, delaying here will be fine, the level will load in the background,
          *        but the next progress update will be delayed until the coroutine returns.
+         *        You are guarenteed a call with progress = 1.0
+         *
+         * @param progress The progress in loading from 0 - 1
          */
         public abstract IEnumerator UpdateProgress(double progress);
         /**
