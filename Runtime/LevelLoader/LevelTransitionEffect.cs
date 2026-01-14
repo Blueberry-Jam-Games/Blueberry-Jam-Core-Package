@@ -10,14 +10,14 @@ namespace BJ
     public abstract class LevelTransitionEffect : MonoBehaviour
     {
         /**
-         * @brief "Black out" the screen so that level loading can happen in the background.
+         * @brief "Lower the Curtains" on the screen so that level loading can happen in the background.
          *        This is a coroutine so returning from here indicates the screen is "blacked out" and the level can be loaded.
          */
-        public abstract IEnumerator CurtainDown();
+        public abstract IEnumerator CurtainsDown();
         /**
-         * @brief Jump to the "Blacked out" state for this animation. It should be ready for Curtain Up immediately after.
+         * @brief Jump to the Curtains Down state for this animation. It should be ready for Curtains Up immediately after.
          */
-        public abstract void JumpToCurtainDown();
+        public abstract void JumpToCurtainsDown();
         /**
          * @brief Update the animation based on the level loading progress.
          *        This is a coroutine, delaying here will be fine, the level will load in the background,
@@ -30,11 +30,11 @@ namespace BJ
         /**
          * @brief Fade in to the loaded scene. Can be animated how you like, returning here indicates the end of the load procedure.
          */
-        public abstract IEnumerator CurtainUp();
+        public abstract IEnumerator CurtainsUp();
         /**
-         * @brief Jump to the "Curtain Up" state for this animation. It should be ready for Black Out immediately after.
+         * @brief Jump to the Curtains Up state for this animation. It should be ready for Curtains Down immediately after.
          */
-        public abstract void JumpToCurtainUp();
+        public abstract void JumpToCurtainsUp();
 
         /**
          * @brief Grants access to built in level transition effects.

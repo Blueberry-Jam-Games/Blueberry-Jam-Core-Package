@@ -23,7 +23,7 @@ namespace BJ
         private float animationTime = 1f;
         private bool useLoadBar = true;
 
-        public override IEnumerator CurtainDown()
+        public override IEnumerator CurtainsDown()
         {
             float time = 0f;
 
@@ -39,7 +39,7 @@ namespace BJ
             overallImage.alpha = 1.0f;
         }
 
-        public override IEnumerator CurtainUp()
+        public override IEnumerator CurtainsUp()
         {
             float time = 0f;
 
@@ -55,13 +55,13 @@ namespace BJ
             overallImage.alpha = 0.0f;
         }
 
-        public override void JumpToCurtainDown()
+        public override void JumpToCurtainsDown()
         {
             overallImage.alpha = 1.0f;
             loadBar.value = 1.0f;
         }
 
-        public override void JumpToCurtainUp()
+        public override void JumpToCurtainsUp()
         {
             overallImage.alpha = 0.0f;
             loadBar.value = 0.0f;
@@ -81,7 +81,7 @@ namespace BJ
             this.loadBar.gameObject.SetActive(useLoadBar);
             this.unloadedColour.color = unloaded;
             this.loadedColour.color = loaded;
-            JumpToCurtainUp();
+            JumpToCurtainsUp();
         }
     }
 }

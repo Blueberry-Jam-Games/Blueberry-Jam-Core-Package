@@ -8,22 +8,22 @@ namespace BJ
     */
     public class TransitionNone : LevelTransitionEffect
     {
-        public override IEnumerator CurtainDown()
+        public override IEnumerator CurtainsDown()
         {
             yield break;
         }
 
-        public override IEnumerator CurtainUp()
+        public override IEnumerator CurtainsUp()
         {
             yield break;
         }
 
-        public override void JumpToCurtainDown()
+        public override void JumpToCurtainsDown()
         {
             //skip
         }
 
-        public override void JumpToCurtainUp()
+        public override void JumpToCurtainsUp()
         {
             // skip
         }

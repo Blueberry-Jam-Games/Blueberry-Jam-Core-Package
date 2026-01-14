@@ -27,12 +27,12 @@ namespace BJ
          */
         public SceneTransitionEvent OnSceneLoadRequested;
         /**
-         * @brief An event fired when any new scene is requested to be loaded, after the blackout animation has played.
+         * @brief An event fired when any new scene is requested to be loaded, after the curtains down animation has played.
          * @param scene The scene that will be loaded.
          */
-        public SceneTransitionEvent OnSceneBlackout;
+        public SceneTransitionEvent OnCurtainsDown;
         /**
-         * @brief An event fired when a new scene is loaded, but the blackout is still active. Can be used to add load reasons or for initialization.
+         * @brief An event fired when a new scene is loaded, but the curtains are still active. Can be used to add load reasons or for initialization.
          * @param scene The scene that was loaded.
          */
         public SceneTransitionEvent OnSceneLoaded;
@@ -40,7 +40,7 @@ namespace BJ
          * @brief An event fired when a new scene has loaded, all load reasons are cleared, and the transition out animation has played.
          * @param scene The scene that was loaded.
          */
-        public SceneTransitionEvent OnBlackoutLifted;
+        public SceneTransitionEvent OnCurtainsLifted;
 
         private static LevelLoader instance;
         public static LevelLoader Instance { get => instance; }
@@ -74,6 +74,16 @@ namespace BJ
 
         private void Start()
         {
+            StartCoroutine(DeferredStart());
+        }
+
+        /**
+         * @brief Runs OnSceneLoaded on the first frame of the first level.
+         *        Implemented as its own function to avoid relying on Coroutines to be initialized yet.
+         */
+        private IEnumerator DeferredStart()
+        {
+            yield return null;
             OnSceneLoaded?.Invoke(SceneManager.GetActiveScene().name);
         }
 
@@ -137,27 +147,27 @@ namespace BJ
         }
 
         /**
-         * @brief Runs the sequence of level loading with a different transition for blackout and curtains up.
+         * @brief Runs the sequence of level loading with a different transition for curtains down and curtains up.
          *        The handoff happens immediately after the 100% transition progress update completes.
-         * @param level      The new level to load.
-         * @param blackOut   The animation to play for curtains down.
-         * @param curtainsUp The animation to play for curtains up.
+         * @param level        The new level to load.
+         * @param curtainsDown The animation to play for curtains down.
+         * @param curtainsUp   The animation to play for curtains up.
          */
-        public void LoadLevel(string level, string blackOut, string curtainsUp)
+        public void LoadLevel(string level, string curtainsDown, string curtainsUp)
         {
-            if (!transitions.ContainsKey(blackOut))
+            if (!transitions.ContainsKey(curtainsDown))
             {
-                Debug.LogError($"Blackout Effect {blackOut} does not exist, using default.");
-                blackOut = defaultAnimation;
+                Debug.LogError($"Curtains Down Effect {curtainsDown} does not exist, using default.");
+                curtainsDown = defaultAnimation;
             }
             // not else, can be both
             if (!transitions.ContainsKey(curtainsUp))
             {
-                Debug.LogError($"Curtain Up Effect {curtainsUp} does not exist, using default.");
+                Debug.LogError($"Curtains Up Effect {curtainsUp} does not exist, using default.");
                 curtainsUp = defaultAnimation;
             }
 
-            StartCoroutine(InternalLevelLoad(level, blackOut, curtainsUp));
+            StartCoroutine(InternalLevelLoad(level, curtainsDown, curtainsUp));
         }
 
         /**
@@ -194,12 +204,12 @@ namespace BJ
         }
 
         /**
-         * @brief Internally run the level loading sequence. If blackOut is the same as curtainsUp there is no handoff.
-         * @param level      The new level to load.
-         * @param blackOut   The animation to play for curtains down.
-         * @param curtainsUp The animation to play for curtains up.
+         * @brief Internally run the level loading sequence. If curtainsDown is the same as curtainsUp there is no handoff.
+         * @param level        The new level to load.
+         * @param curtainsDown The animation to play for curtains down.
+         * @param curtainsUp   The animation to play for curtains up.
          */
-        private IEnumerator InternalLevelLoad(string level, string blackOut, string curtainsUp)
+        private IEnumerator InternalLevelLoad(string level, string curtainsDown, string curtainsUp)
         {
             if (loadingLevel)
             {
@@ -212,15 +222,15 @@ namespace BJ
 
             OnSceneLoadRequested?.Invoke(level);
 
-            LevelTransitionEffect transitionOut = transitions[blackOut];
+            LevelTransitionEffect transitionOut = transitions[curtainsDown];
             transitionOut.gameObject.SetActive(true);
-            transitionOut.JumpToCurtainUp();
+            transitionOut.JumpToCurtainsUp();
 
-            yield return transitionOut.CurtainDown();
+            yield return transitionOut.CurtainsDown();
 
             Debug.Log($"Loading level {level}, completed curtains down.");
 
-            OnSceneBlackout?.Invoke(level);
+            OnCurtainsDown?.Invoke(level);
 
             // Do level loading
             AsyncOperation loadOperation = SceneManager.LoadSceneAsync(level);
@@ -248,22 +258,22 @@ namespace BJ
             Debug.Log($"Loading level {level}, starting curtains up.");
 
             // If the transition out and in are different this is where the handoff happens, otherwise it is skipped.
-            if (!blackOut.Equals(curtainsUp))
+            if (!curtainsDown.Equals(curtainsUp))
             {
                 transitionIn = transitions[curtainsUp];
 
                 transitionOut.gameObject.SetActive(false);
                 transitionIn.gameObject.SetActive(true);
-                transitionIn.JumpToCurtainDown();
+                transitionIn.JumpToCurtainsDown();
             }
 
-            yield return transitionIn.CurtainUp();
+            yield return transitionIn.CurtainsUp();
 
             transitionIn.gameObject.SetActive(false);
 
             Debug.Log($"Loading level {level}, completed curtains up.");
 
-            OnBlackoutLifted?.Invoke(level);
+            OnCurtainsLifted?.Invoke(level);
 
             // We can now load a new level
             loadingLevel = false;
