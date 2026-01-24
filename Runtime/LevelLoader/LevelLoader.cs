@@ -147,11 +147,23 @@ namespace BJ
         }
 
         /**
+         * @brief Checks if we are currently in the process of loading a level. If we are, attempting to load a new level will not work.
+         *
+         * @return true if a level is currently being loaded, false otherwise.
+         */
+        public bool IsCurrentlyLoading()
+        {
+            return loadingLevel;
+        }
+
+        /**
          * @brief Runs the sequence of level loading with a different transition for curtains down and curtains up.
          *        The handoff happens immediately after the 100% transition progress update completes.
          * @param level        The new level to load.
          * @param curtainsDown The animation to play for curtains down.
          * @param curtainsUp   The animation to play for curtains up.
+         *
+         * @remark A new level loading operation cannot be started if one is in progress. See IsCurrentlyLoading()
          */
         public void LoadLevel(string level, string curtainsDown, string curtainsUp)
         {
@@ -174,6 +186,8 @@ namespace BJ
          * @brief Runs the sequence of level loading with the given transition.
          * @param level     The new level to load.
          * @param transtion The animation to play.
+         *
+         * @remark A new level loading operation cannot be started if one is in progress. See IsCurrentlyLoading()
          */
         public void LoadLevel(string level, string transtion)
         {
