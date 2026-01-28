@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 namespace BJ
 {
     /**
-     * @brief SoundManager is a quick way to readily play froma  bank of sound, each sound can have custom settings as though it were it's own audio source.
+     * @brief SoundManager is a quick way to readily play from a bank of sound, each sound can have custom settings as though it were it's own audio source.
      *                     Under the hood this script creates audio sources for each sound to play and provides an easy interface to these sounds.
      */
     public class SoundManager : MonoBehaviour
