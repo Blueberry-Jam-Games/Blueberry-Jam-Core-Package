@@ -107,7 +107,7 @@ namespace BJ
             {
                 transitions[id] = transition;
                 DontDestroyOnLoad(transition.gameObject);
-                transition.transform.parent = this.transform;
+                transition.transform.SetParent(this.transform, true);
                 transition.gameObject.name = id;
                 transition.gameObject.SetActive(false);
                 return true;
