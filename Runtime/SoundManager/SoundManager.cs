@@ -34,6 +34,7 @@ namespace BJ
                 sound.source.pitch = sound.pitch;
                 sound.source.playOnAwake = sound.playOnAwake;
                 sound.source.loop = sound.loop;
+                sound.source.spatialBlend = sound.spatialBlend;
 
                 if (!soundMap.ContainsKey(sound.name))
                 {
