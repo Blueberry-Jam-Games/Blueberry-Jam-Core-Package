@@ -224,7 +224,7 @@ namespace BJ
          */
         public void HoldLevelLoad(string loadReason)
         {
-            if(loadHoldReasons.Contains(loadReason))
+            if (loadHoldReasons.Contains(loadReason))
             {
                 Debug.LogError($"Attempting to add load reason {loadReason} twice.");
             }
@@ -241,7 +241,7 @@ namespace BJ
          */
         public void ResolveLevelLoad(string loadReason)
         {
-            if(loadHoldReasons.Contains(loadReason))
+            if (loadHoldReasons.Contains(loadReason))
             {
                 loadHoldReasons.Remove(loadReason);
             }
