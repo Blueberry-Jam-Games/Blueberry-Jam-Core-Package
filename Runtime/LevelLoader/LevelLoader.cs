@@ -218,6 +218,40 @@ namespace BJ
         }
 
         /**
+         * @brief Adds an indication to the level loader that the transition should be held to allow scene initialization to run.
+         *
+         * @param loadReason A unique string identifier of the reason loading is being held.
+         */
+        public void HoldLevelLoad(string loadReason)
+        {
+            if(loadHoldReasons.Contains(loadReason))
+            {
+                Debug.LogError($"Attempting to add load reason {loadReason} twice.");
+            }
+            else
+            {
+                loadHoldReasons.Add(loadReason);
+            }
+        }
+
+        /**
+         * @brief Marks a previously logged transition holding reason as completed.
+         *
+         * @param loadReason The unique string identifier of the reason loading was being held.
+         */
+        public void ResolveLevelLoad(string loadReason)
+        {
+            if(loadHoldReasons.Contains(loadReason))
+            {
+                loadHoldReasons.Remove(loadReason);
+            }
+            else
+            {
+                Debug.LogError($"Attempting to remove load reason {loadReason} but it is not registered.");
+            }
+        }
+
+        /**
          * @brief Internally run the level loading sequence. If curtainsDown is the same as curtainsUp there is no handoff.
          * @param level        The new level to load.
          * @param curtainsDown The animation to play for curtains down.
